@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7
+    command: "-c /traefik.toml"
+    ports:
+      - "80:80"
+      - "81:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+    networks:
+      - api
+
+  service1:
+    image: containous/whoami
+    ports:
+      - "80"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        traefik.enable: "true"
+        traefik.backend: service1
+        traefik.frontend.rule: "Host:localhost;PathPrefixStrip:/service1"
+        traefik.port: 80
+        # traefik.backend.healthcheck.path: /health
+    networks:
+      - api
+
+networks:
+  api:
+    driver: overlay
+    attachable: true

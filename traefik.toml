@@ -1,0 +1,12 @@
+logLevel = "DEBUG"
+
+[accessLog]
+
+[api]
+dashboard = true
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+swarmMode = true
+exposedByDefault = true
+watch = true
