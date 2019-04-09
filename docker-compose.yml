@@ -21,9 +21,11 @@ services:
       mode: replicated
       replicas: 1
       labels:
-        traefik.enable: "true"
-        traefik.backend: service1
+        # traefik.enable: "true"
+        # traefik.backend: service1
         traefik.frontend.rule: "Host:localhost;PathPrefixStrip:/service1"
+        # Added this based on https://github.com/containous/traefik/issues/3535
+        traefik.docker.network: api_api
         traefik.port: 80
         # traefik.backend.healthcheck.path: /health
     networks:

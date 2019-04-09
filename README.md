@@ -2,6 +2,14 @@
 
 When a simple service is configured to be read from Docker Swarm, Traefik recieves the information about the service, but when requests are routed to the service they fail with a `504 Gateway Timeout` error.
 
+## Solution
+
+`traefik.docker.network` is required when configuring Docker Swarm when there are multiple networks involved.
+
+Thanks to: https://github.com/containous/traefik/issues/3535
+
+Docs PR: https://github.com/containous/traefik/pull/4751
+
 ## Reproduce
 
 ```
@@ -100,3 +108,6 @@ api_reverse-proxy.1.y14kv67a0mdk@linuxkit-025000000001    | time="2019-04-09T03:
 api_reverse-proxy.1.y14kv67a0mdk@linuxkit-025000000001    | time="2019-04-09T03:34:47Z" level=debug msg="vulcand/oxy/roundrobin/rr: completed ServeHttp on request" Request="{\"Method\":\"GET\",\"URL\":{\"Scheme\":\"\",\"Opaque\":\"\",\"User\":null,\"Host\":\"\",\"Path\":\"/\",\"RawPath\":\"\",\"ForceQuery\":false,\"RawQuery\":\"\",\"Fragment\":\"\"},\"Proto\":\"HTTP/1.1\",\"ProtoMajor\":1,\"ProtoMinor\":1,\"Header\":{\"Accept\":[\"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\"],\"Accept-Encoding\":[\"gzip, deflate, br\"],\"Accept-Language\":[\"en-US,en;q=0.9\"],\"Connection\":[\"keep-alive\"],\"Dnt\":[\"1\"],\"Upgrade-Insecure-Requests\":[\"1\"],\"User-Agent\":[\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36\"],\"X-Forwarded-Prefix\":[\"/service1\"]},\"ContentLength\":0,\"TransferEncoding\":null,\"Host\":\"localhost\",\"Form\":null,\"PostForm\":null,\"MultipartForm\":null,\"Trailer\":null,\"RemoteAddr\":\"10.255.0.2:37378\",\"RequestURI\":\"/\",\"TLS\":null}"
 api_reverse-proxy.1.y14kv67a0mdk@linuxkit-025000000001    | 10.255.0.2 - - [09/Apr/2019:03:34:17 +0000] "GET /service1 HTTP/1.1" 504 15 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36" 1 "Host-localhost-PathPrefixStrip-service1-0" "http://10.255.0.133:80" 29976ms
 ```
+
+## Config
+
