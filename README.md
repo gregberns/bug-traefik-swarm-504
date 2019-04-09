@@ -8,7 +8,8 @@ When a simple service is configured to be read from Docker Swarm, Traefik reciev
 git clone https://github.com/gregberns/bug-traefik-swarm-504.git
 cd bug-traefik-swarm-504
 docker stack deploy -c docker-compose.yml api
-docker service ls # find the 'traefik' service
+docker service ls # find the 'api_traefik' service
+curl http://localhost/service1 # this will timeout
 docker service logs <traefik service id>
 ```
 
